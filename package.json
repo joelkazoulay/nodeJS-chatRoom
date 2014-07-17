@@ -1,0 +1,10 @@
+{ "repository": {
+    "type": "git",
+    "url": "git://github.com/joelkazoulay/nodeJS-chatRoom.git"
+},
+    "dependencies" :
+{
+    "socket.io": "0.9.6",
+    "mime": "1.2.7"
+}
+}
