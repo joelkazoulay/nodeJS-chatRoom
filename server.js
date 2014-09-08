@@ -13,8 +13,8 @@ var send404 = function(response) {
 
 var sendFile = function(response, filePath, fileContents) {
     response.writeHead(200, {
-        'Content-Type': mime.lookup(path.basename(filePath))
-    });
+        'Content-Type': mime.lookup(path.basename(filePath))}
+    );
     response.end(fileContents);
 };
 
@@ -40,16 +40,17 @@ var serveStatic = function(response, cache, absPath) {
 };
 
 var server = http.createServer(function(request, response) {
-    var filePath = false;
+    var filePath;
 
     if(request.url === '/') {
-        filePath = 'public/index.html';
+        filePath = './public/index.html';
+    } else if (request.url.indexOf('node_modules') !== -1) {
+        filePath = '../' + request.url;
     } else {
-        filePath = 'public + rquest.url;'
+        filePath = './public' + request.url;
     }
 
-    var absPath = './' + filePath;
-    serveStatic(response, cache, absPath);
+    serveStatic(response, cache, filePath);
 });
 
 server.listen(3000, function() {
