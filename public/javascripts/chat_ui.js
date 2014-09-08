@@ -1,35 +1,44 @@
+/*globals $,io,Chat*/
 function divEscapedContentElement(message) {
+    'use strict';
+
     return $('<div></div>').text(message);
 }
 
 function divSystemContentElement(message) {
+    'use strict';
+
     return $('<div></div>').html('<i>' + message + '</i>');
 }
 
 function processUserInput(chatApp) {
+    'use strict';
+
     var $sendMessage = $('#send-message'),
         message = $sendMessage.val(),
         systemMessage;
 
-    if(message.charAt(0) === '/') {
+    if (message.charAt(0) === '/') {
         systemMessage = chatApp.processCommand(message);
 
-        if(systemMessage) {
+        if (systemMessage) {
             $('#message').append(divSystemContentElement(systemMessage));
-        } else {
+        }
+    } else {
             chatApp.sendMessage($('#room').text(), message);
             var $messages = $('#messages');
             $messages.append(divEscapedContentElement(message));
             $messages.scrollTop($messages.prop('scrollHeight'));
         }
 
-        $sendMessage.val('')
-    }
+        $sendMessage.val('');
 }
 
 var socket = io.connect();
 
 $(document).ready(function() {
+    'use strict';
+
     var chatApp = new Chat(socket),
         $room = $('#room'),
         $messages = $('#messages'),
@@ -52,18 +61,13 @@ $(document).ready(function() {
         $messages.append(divSystemContentElement('Room changed'));
     });
 
-    socket.on('message', function() {
-        $room.text(result.room);
-        $messages.append(divSystemContentElement('Room changed.'));
-    });
-
     socket.on('message', function(message) {
         var newElement = $('<div></div>').text(message.text);
-                $messages.append(newElement);
+        $messages.append(newElement);
     });
 
     socket.on('rooms', function(rooms) {
-        var $roomList = $('room-list');
+        var $roomList = $('#room-list');
         $roomList.empty();
 
         for(var room in rooms) {

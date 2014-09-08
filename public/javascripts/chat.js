@@ -1,8 +1,12 @@
 var Chat = function(socket) {
+    'use strict';
+
     this.socket = socket;
 };
 
 Chat.prototype.sendMessage = function(room, text) {
+    'use strict';
+
     var message = {
         room: room,
         text: text
@@ -12,17 +16,22 @@ Chat.prototype.sendMessage = function(room, text) {
 };
 
 Chat.prototype.changeRoom = function(room) {
+    'use strict';
+
     this.socket.emit('join', {
         newRoom: room
     });
 };
 
 Chat.prototype.processCommand = function(command) {
+    'use strict';
+
     var words = command.split(' '),
         Command = words[0]
             .substring(1, words[0].length)
             .toLowerCase(),
         message = false;
+
     switch(Command) {
         case 'join':
             words.shift();
@@ -35,6 +44,7 @@ Chat.prototype.processCommand = function(command) {
             var name = words.join(' ');
             this.socket.emit('nameAttempt', name);
             break;
+
         default:
             message = 'Unrecognized command.';
             break;

@@ -1,3 +1,4 @@
+/*globals require,console*/
 var http = require('http'),
     fs = require('fs'),
     path = require('path'),
@@ -6,12 +7,16 @@ var http = require('http'),
     chatServer = require('./lib/chat_server');
 
 var send404 = function(response) {
+    'use strict';
+
     response.writeHead(404, {'Content-Type': 'text/plain'});
     response.write('Error 404: resource not found.');
     response.end();
 };
 
 var sendFile = function(response, filePath, fileContents) {
+    'use strict';
+
     response.writeHead(200, {
         'Content-Type': mime.lookup(path.basename(filePath))}
     );
@@ -19,6 +24,8 @@ var sendFile = function(response, filePath, fileContents) {
 };
 
 var serveStatic = function(response, cache, absPath) {
+    'use strict';
+
     if(cache[absPath]) {
         sendFile(response, absPath, cache[absPath]);
     } else {
@@ -26,7 +33,7 @@ var serveStatic = function(response, cache, absPath) {
             if (exists) {
                 fs.readFile(absPath, function(err, data) {
                     if (err) {
-                        send404(response)
+                        send404(response);
                     } else {
                         cache[absPath] = data;
                         sendFile(response, absPath, data);
@@ -40,6 +47,8 @@ var serveStatic = function(response, cache, absPath) {
 };
 
 var server = http.createServer(function(request, response) {
+    'use strict';
+
     var filePath;
 
     if(request.url === '/') {
@@ -54,6 +63,8 @@ var server = http.createServer(function(request, response) {
 });
 
 server.listen(3000, function() {
+    'use strict';
+
     console.log('Server listening on port 3000.');
 });
 
